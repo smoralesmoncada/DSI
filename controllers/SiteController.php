@@ -10,53 +10,50 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\ValidarFormulario;
+use app\models\FormEstado;
+use app\models\EstadoConvenios;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function actionFormulario($mensaje = null){
+   public function actionCreate()
+   {
+    $model = new FormEstado;
+    $msg = null;
+    if($model->load(Yii::$app->request->post()))
+    {
 
-
-        return $this ->render("formulario", ["mensaje" => $mensaje]);
-    }
-
-    public function actionRequest(){
-
-        $mensaje = null;
-        if(isset($_REQUEST["nombre"])){
-
-
-        $mensaje = "Todo ok" . $_REQUEST["nombre"];
-        }
-
-        $this -> redirect(["site/formulario", "mensaje" => $mensaje]);
-
-    }
-
-    public function actionValidarformulario(){
-
-        $model = new ValidarFormulario;
-        if($model->load(Yii::$app->request->post()))
+        if($model->validate())
         {
 
-            if($model->validate())
-            {
+            $table = new EstadoConvenios;
+            $table->id_estado_convenio = $model->ID;
+            $table->nombre_estado_convenio = $model->EstadoConvenio;
+            $table->descripcion = $model->Descripcion;
+            $table->vigente = $model->Vigente;
+            if($table->insert()){
 
-                //consultar bd
-
+                $msg = "Estado convenio ingresado correctamente";
+                $model->ID = null;
+                $model->EstadoConvenio = null;
+                $model->Descripcion = null;
+                $model->Vigente = null;
             }else{
 
-                $model->getErrors();
+                $msg = "Error";
 
             }
+        }else{
 
+         $model->getErrors();
 
         }
-        return $this->render("validarformulario", ["model" => $model]);
+
+
 
     }
+   return $this->render("create", ['model' => $model, 'msg' => $msg]);
+
+   }
 
     public function behaviors()
     {
