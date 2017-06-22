@@ -1,7 +1,11 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 ?>
+
+<a href="<?= Url::toRoute("site/view") ?>">Ver estado de convenios </a>
+
 <h1> Crear Estado Convenio</h1>
 <h3> <?= $msg ?> </h3>
 

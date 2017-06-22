@@ -15,6 +15,17 @@ use app\models\EstadoConvenios;
 
 class SiteController extends Controller
 {
+
+    public function actionView()
+    {
+        $table = new EstadoConvenios;
+        $model = $table->find()->all();
+
+        return $this->render("view", ["model" => $model]);
+
+    }
+
+
    public function actionCreate()
    {
     $model = new FormEstado;
@@ -47,8 +58,6 @@ class SiteController extends Controller
          $model->getErrors();
 
         }
-
-
 
     }
    return $this->render("create", ['model' => $model, 'msg' => $msg]);
