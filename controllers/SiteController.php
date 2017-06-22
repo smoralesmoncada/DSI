@@ -9,12 +9,55 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\ValidarFormulario;
 
 class SiteController extends Controller
 {
     /**
      * @inheritdoc
      */
+    public function actionFormulario($mensaje = null){
+
+
+        return $this ->render("formulario", ["mensaje" => $mensaje]);
+    }
+
+    public function actionRequest(){
+
+        $mensaje = null;
+        if(isset($_REQUEST["nombre"])){
+
+
+        $mensaje = "Todo ok" . $_REQUEST["nombre"];
+        }
+
+        $this -> redirect(["site/formulario", "mensaje" => $mensaje]);
+
+    }
+
+    public function actionValidarformulario(){
+
+        $model = new ValidarFormulario;
+        if($model->load(Yii::$app->request->post()))
+        {
+
+            if($model->validate())
+            {
+
+                //consultar bd
+
+            }else{
+
+                $model->getErrors();
+
+            }
+
+
+        }
+        return $this->render("validarformulario", ["model" => $model]);
+
+    }
+
     public function behaviors()
     {
         return [
