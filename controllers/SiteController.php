@@ -12,6 +12,8 @@ use app\models\ContactForm;
 use app\models\ValidarFormulario;
 use app\models\FormEstado;
 use app\models\EstadoConvenios;
+use app\models\FormSearch;
+use yii\helpers\Html;
 
 class SiteController extends Controller
 {
@@ -21,7 +23,23 @@ class SiteController extends Controller
         $table = new EstadoConvenios;
         $model = $table->find()->all();
 
-        return $this->render("view", ["model" => $model]);
+        $form = new FormSearch;
+        $search = null;
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $search = Html::encode($form->q);
+                $query = "SELECT * FROM CNV_ESTADO_CONVENIO WHERE CAST(id_estado_convenio AS VARCHAR) LIKE '%$search%' OR ";
+                $query .= "nombre_estado_convenio LIKE '%$search%'";
+                $model = $table->findBySql($query)->all();
+            }else{
+
+                $form->getErrors();
+            }
+
+        }
+        return $this->render("view", ["model" => $model,"form"=> $form,"search" => $search]);
 
     }
 

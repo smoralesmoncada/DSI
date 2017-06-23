@@ -1,11 +1,31 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 ?>
 
 <a href="<?= Url::toRoute("site/create") ?>"> Ingresar estado convenio </a>
 
-<h3>Estado de convenios</h3>
 
+<?php $f = ActiveForm::begin([
+	"method" => "get",
+	"action" => Url::toRoute("site/view"),
+	"enableClientValidation" => true,
+	]);
+?>
+
+<div class="form-group">
+<?= $f->field($form,"q")->input("search") ?>
+</div>
+
+<?=  Html::submitButton("Buscar", ["class" => "btn btn-primary"] ) ?>
+
+<?php $f->end() ?>
+
+<h3> <?= $search ?> </h3>
+
+
+<h3>Estado de convenios</h3>
 <table class="table table-bordered">
  <tr>
 	<th>ID</th>
