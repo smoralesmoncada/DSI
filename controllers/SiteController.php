@@ -15,6 +15,13 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
+    
+    public function actionCreate(){
+        return $this->render("create");
+    }
+    
+    
+    
     public function behaviors()
     {
         return [
