@@ -17,11 +17,9 @@ use yii\helpers\Url;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     
-
+    
+   public function actionView()
     {
         $table = new Convenio;
         $model = $table->find()->all();
