@@ -200,6 +200,13 @@ class SiteController extends Controller
         }
     }
 
+    public function actionVerc()
+    {
+        $table = new Coordinador;
+        $model = $table->find()->orderBy('id_coordinador_convenio')->all();
+        return $this->render("verc", ['model' => $model]);
+    }
+
     public function behaviors()
     {
         return [

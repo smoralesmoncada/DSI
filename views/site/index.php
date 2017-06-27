@@ -5,6 +5,10 @@
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
+    <a class="btn btn-primary" href="<?=Url::toRoute("site/crearc") ?>">Crear</a>
+    <a class="btn btn-primary" href="<?=Url::toRoute("site/actualizarb") ?>">Modificar</a>
+    <a class="btn btn-primary" href="<?=Url::toRoute("site/eliminarb") ?>">Eliminar</a>
+    <a class="btn btn-primary" href="<?=Url::toRoute("site/verc") ?>">Ver</a>
     <div class="jumbotron">
         <h1>Congratulations!</h1>
 
