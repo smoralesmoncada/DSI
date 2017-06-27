@@ -163,6 +163,43 @@ class SiteController extends Controller
         return $this->render("actualizarc", ["model" => $model, "msg" => $msg]);
     }
 
+    public function actionEliminarb()
+    {
+        $table = new Coordinador;
+        $model = $table->find()->orderBy('id_coordinador_convenio')->all();
+        return $this->render("eliminarb", ['model' => $model]);
+    }
+
+    public function actionEliminar()
+    {
+        if(Yii::$app->request->post())
+        {
+            $id_coordinador_convenio = Html::encode($_POST["id_coordinador_convenio"]);
+            if((int) $id_coordinador_convenio)
+            {
+                if(Coordinador::deleteAll("id_coordinador_convenio=:id_coordinador_convenio", [":id_coordinador_convenio" => $id_coordinador_convenio]))
+                {
+                    echo "Coordinador con id $id_coordinador_convenio eliminado con éxito, redireccionando ...";
+                    echo "<meta http-equiv='refresh' content='1; ".Url::toRoute("site/eliminarb")."'>";
+                }
+                else
+                {
+                    echo "Ha ocurrido un error al eliminar el Coordinador, redireccionando ...";
+                    echo "<meta http-equiv='refresh' content='1; ".Url::toRoute("site/eliminarb")."'>"; 
+                }
+            }
+            else
+            {
+                echo "Ha ocurrido un error al eliminar el Coordinador, redireccionando ...";
+                echo "<meta http-equiv='refresh' content='1; ".Url::toRoute("site/eliminarb")."'>";
+            }
+        }
+        else
+        {
+            return $this->redirect(["site/index"]);
+        }
+    }
+
     public function behaviors()
     {
         return [
