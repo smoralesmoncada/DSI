@@ -11,6 +11,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Coordinador;
 use app\models\ValidarCoordinador;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -70,7 +72,97 @@ class SiteController extends Controller
         }
         return $this->render("crearc", ['model' => $model, 'msg' => $msg]);
     }
-    
+
+    public function actionActualizarb()
+    {
+        $table = new Coordinador;
+        $model = $table->find()->orderBy('id_coordinador_convenio')->all();
+        return $this->render("actualizarb", ['model' => $model]);
+    }
+
+    public function actionActualizarc()
+    {
+        $model = new ValidarCoordinador;
+        $msg = null;
+            
+        if($model->load(Yii::$app->request->post()))
+        {
+            if($model->validate())
+            {
+                $table = Coordinador::findOne($model->id_coordinador_convenio);
+                if($table)
+                {
+                    $table->id_coordinador_convenio = $model->id_coordinador_convenio;
+                    $table->rut_coordinador_convenio = $model->rut_coordinador_convenio;
+                    $table->nombre_coordinador_convenio = $model->nombre_coordinador_convenio;
+                    $table->dv_coordinador_convenio = $model->dv_coordinador_convenio;
+                    $table->fecha_inicio = $model->fecha_inicio;
+                    $table->fecha_fin = $model->fecha_fin;
+                    $table->vigente = $model->vigente;
+                    $table->esexterno = $model->esexterno;
+                    $table->unidad_academica = $model->unidad_academica;
+                    $table->email = $model->email;
+                    $table->id_institucion= $model->id_institucion;
+                    if ($table->update())
+                    {
+                        $msg = "El Coordinador ha sido actualizado correctamente";
+                        echo "<meta http-equiv='refresh' content='1; ".Url::toRoute("site/actualizarb")."'>";
+                    }
+                    else
+                    {
+                        $msg = "El Coordinador no ha podido ser actualizado";
+                        echo "<meta http-equiv='refresh' content='1; ".Url::toRoute("site/actualizarb")."'>";
+                    }
+                }
+                else
+                {
+                    $msg = "El Coordinador seleccionado no ha sido encontrado";
+                    echo "<meta http-equiv='refresh' content='1; ".Url::toRoute("site/actualizarb")."'>";
+                }
+            }
+            else
+            {
+                $model->getErrors();
+            }
+        }
+            
+        if (Yii::$app->request->get("id_coordinador_convenio"))
+        {
+            $id_coordinador_convenio = Html::encode($_GET["id_coordinador_convenio"]);
+            if ((int) $id_coordinador_convenio)
+            {
+                $table = Coordinador::findOne($id_coordinador_convenio);
+                if($table)
+                {
+                    $model->id_coordinador_convenio = $table->id_coordinador_convenio;
+                    $model->rut_coordinador_convenio = $table->rut_coordinador_convenio;
+                    $model->nombre_coordinador_convenio = $table->nombre_coordinador_convenio;
+                    $model->dv_coordinador_convenio = $table->dv_coordinador_convenio;
+                    $model->fecha_inicio = $table->fecha_inicio;
+                    $model->fecha_fin = $table->fecha_fin;
+                    $model->vigente = $table->vigente;
+                    $model->esexterno = $table->esexterno;
+                    $model->unidad_academica = $table->unidad_academica;
+                    $model->email = $table->email;
+                    $model->id_institucion= $table->id_institucion;
+                }
+                else
+                {
+                    return $this->redirect(["site/index"]);
+                }
+            }
+            else
+            {
+                return $this->redirect(["site/index"]);
+            }
+        }
+        else
+        {
+           return $this->redirect(["site/index"]);
+        }
+        return $this->render("actualizarc", ["model" => $model, "msg" => $msg]);
+    }
+
     public function behaviors()
     {
         return [
